@@ -10,15 +10,16 @@ export default function AuthProvider({ children }: Props) {
 	const router = useRouter();
 	const path = usePathname();
 
-	useEffect(() => {
-		initialize();
-	}, []);
-
 	const initialize = () => {
-		if (path === "/") {
+		if (path == "/") {
 			router.push("/stock");
 			return null;
 		}
 	};
+
+	useEffect(() => {
+		initialize();
+	}, []);
+
 	return <div>{children}</div>;
 }

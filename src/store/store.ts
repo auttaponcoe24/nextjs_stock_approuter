@@ -1,7 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
+import userReducer from "@/src/store/slices/userSlice";
 
-const reducer = {};
+const reducer = { userReducer };
+
 export const store = configureStore({
 	reducer,
 	devTools: process.env.NODE_ENV === "development",
