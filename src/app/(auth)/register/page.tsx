@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import {
+	Alert,
 	Box,
 	Button,
 	Card,
@@ -14,6 +15,9 @@ import { Controller, useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
+import { RootState, useAppDispatch } from "@/src/store/store";
+import { add, signUp, userSelector } from "@/src/store/slices/userSlice";
 
 interface User {
 	username: string;
@@ -21,6 +25,13 @@ interface User {
 }
 
 type Props = {};
+
+import Snackbar, { SnackbarOrigin } from "@mui/material/Snackbar";
+
+interface State extends SnackbarOrigin {
+	open: boolean;
+	severity: any;
+}
 
 export default function Register({}: Props) {
 	const [user, setUser] = useState<User>({ username: "", password: "" });
@@ -32,6 +43,14 @@ export default function Register({}: Props) {
 		password: Yup.string().required("Password is required").trim(),
 	});
 
+	const [notiState, setNotiState] = useState<State>({
+		open: false,
+		horizontal: "right",
+		vertical: "top",
+		severity: "success",
+	});
+	// const [notiState, setNotiState] = useState<boolean>(false);
+
 	// validation => hook-form
 	const {
 		control,
@@ -42,12 +61,33 @@ export default function Register({}: Props) {
 		resolver: yupResolver(formValidateSchema),
 	});
 
-	const handleOnSubmitForm = (data: User) => {
+	const handleOnSubmitForm = async (data: User) => {
 		console.log(data);
+		const res = await dispatch(signUp(data));
+		console.log("first", res);
+		if (res.payload.result === "ok") {
+			setNotiState((prev: any) => ({
+				...prev,
+				open: true,
+			}));
+			setTimeout(() => {
+				router.push("/stock");
+			}, 3000);
+		} else {
+			setNotiState((prev: any) => ({
+				...prev,
+				open: true,
+				severity: "error",
+			}));
+		}
 
-		alert(JSON.stringify(data));
+		// alert(JSON.stringify(data));
 		console.log(errors);
 	};
+
+	// const reducer = useSelector((state: RootState) => state.userReducer);
+	const reducer = useSelector(userSelector);
+	const dispatch = useAppDispatch();
 
 	const showForm = () => {
 		return (
@@ -128,9 +168,12 @@ export default function Register({}: Props) {
 				<Button
 					className="mt-4"
 					fullWidth
-					type="submit"
+					type="button"
 					variant="outlined"
-					onClick={() => router.push(`/login`)}
+					onClick={() => {
+						dispatch(add());
+						router.push(`/login`);
+					}}
 				>
 					Cancel
 				</Button>
@@ -143,12 +186,11 @@ export default function Register({}: Props) {
 			<Card className="max-w-[345px] mt-10" elevation={3}>
 				<CardContent>
 					<Typography gutterBottom variant="h5" component="h2">
-						Register
+						Register ({reducer?.count})
 					</Typography>
 					{showForm()}
 				</CardContent>
 			</Card>
-
 			<style jsx global>
 				{`
 					body {
@@ -161,6 +203,31 @@ export default function Register({}: Props) {
 					}
 				`}
 			</style>
+			{/* {
+				open: false
+				horizontal: 'right'
+				vertical: 'top
+				severity="success"
+			} */}
+			<Snackbar
+				open={notiState?.open}
+				autoHideDuration={6000}
+				anchorOrigin={{
+					horizontal: notiState?.horizontal,
+					vertical: notiState?.vertical,
+				}}
+			>
+				<Alert
+					severity={notiState?.severity}
+					variant="filled"
+					sx={{ width: "100%" }}
+				>
+					{notiState?.severity === "success"
+						? "สร้างบัญชีสำเร็จ"
+						: "เกิดข้อผิดพลาดการสร้างบัญชี"}
+				</Alert>
+			</Snackbar>
+			;
 		</Box>
 	);
 }

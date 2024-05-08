@@ -14,6 +14,9 @@ import { Controller, useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
+import { add, userSelector } from "@/src/store/slices/userSlice";
+import { useAppDispatch } from "@/src/store/store";
 
 interface User {
 	username: string;
@@ -26,7 +29,7 @@ export default function Login({}: Props) {
 	const [user, setUser] = useState<User>({ username: "", password: "" });
 	const router = useRouter();
 
-	const initialValue: User = { username: "", password: "" };
+	const initialValue: User = { username: "admin", password: "" };
 	const formValidateSchema = Yup.object().shape({
 		username: Yup.string().required("Username is required").trim(),
 		password: Yup.string().required("Password is required").trim(),
@@ -48,6 +51,9 @@ export default function Login({}: Props) {
 		alert(JSON.stringify(data));
 		console.log(errors);
 	};
+
+	const reducer = useSelector(userSelector);
+	const dispatch = useAppDispatch();
 
 	const showForm = () => {
 		return (
@@ -128,9 +134,10 @@ export default function Login({}: Props) {
 				<Button
 					className="mt-4"
 					fullWidth
-					type="submit"
+					type="button"
 					variant="outlined"
 					onClick={() => {
+						dispatch(add());
 						router.push("/register");
 					}}
 				>
@@ -145,7 +152,7 @@ export default function Login({}: Props) {
 			<Card className="max-w-[345px] mt-10" elevation={3}>
 				<CardContent>
 					<Typography gutterBottom variant="h5" component="h2">
-						Login
+						Login ({reducer.count})
 					</Typography>
 					{showForm()}
 				</CardContent>
