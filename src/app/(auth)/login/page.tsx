@@ -1,11 +1,13 @@
 "use client";
 import React, { useState } from "react";
 import {
+	Alert,
 	Box,
 	Button,
 	Card,
 	CardContent,
 	InputAdornment,
+	Snackbar,
 	TextField,
 	Typography,
 } from "@mui/material";
@@ -15,7 +17,7 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
-import { add, userSelector } from "@/src/store/slices/userSlice";
+import { add, signIn, userSelector } from "@/src/store/slices/userSlice";
 import { useAppDispatch } from "@/src/store/store";
 
 interface User {
@@ -27,7 +29,10 @@ type Props = {};
 
 export default function Login({}: Props) {
 	const [user, setUser] = useState<User>({ username: "", password: "" });
+	const [open, setOpen] = useState<boolean>(false);
 	const router = useRouter();
+	const reducer = useSelector(userSelector);
+	const dispatch = useAppDispatch();
 
 	const initialValue: User = { username: "admin", password: "" };
 	const formValidateSchema = Yup.object().shape({
@@ -45,19 +50,24 @@ export default function Login({}: Props) {
 		resolver: yupResolver(formValidateSchema),
 	});
 
-	const handleOnSubmitForm = (data: User) => {
-		console.log(data);
+	const onSubmitForm = async (data: User) => {
+		const result = await dispatch(signIn(data));
+		console.log("result", result);
 
-		alert(JSON.stringify(data));
-		console.log(errors);
+		if (signIn.fulfilled.match(result)) {
+			setOpen(true);
+			setTimeout(() => {
+				router.push("/stock");
+			}, 3000);
+		} else if (signIn.rejected.match(result)) {
+			// alert("Login failed");
+			setOpen(true);
+		}
 	};
-
-	const reducer = useSelector(userSelector);
-	const dispatch = useAppDispatch();
 
 	const showForm = () => {
 		return (
-			<form onSubmit={handleSubmit(handleOnSubmitForm)}>
+			<form onSubmit={handleSubmit(onSubmitForm)}>
 				{/* Username */}
 				<Controller
 					control={control}
@@ -127,7 +137,7 @@ export default function Login({}: Props) {
 					fullWidth
 					variant="contained"
 					color="primary"
-					// onClick={() => {}}
+					disabled={reducer?.status === "fetching"}
 				>
 					Login
 				</Button>
@@ -170,6 +180,26 @@ export default function Login({}: Props) {
 					}
 				`}
 			</style>
+
+			<Snackbar
+				open={open}
+				autoHideDuration={6000}
+				anchorOrigin={{
+					horizontal: "right",
+					vertical: "top",
+				}}
+			>
+				<Alert
+					color={reducer?.status === "success" ? "success" : "error"}
+					// severity={reducer?.status === "success" ? "success" : "error"}
+					variant="filled"
+					sx={{ width: "100%" }}
+				>
+					{reducer?.status === "success"
+						? "เข้าสู้ระบบสำเร็จ"
+						: "เกิดข้อผิดพลาดการเข้าสู่ระบบ"}
+				</Alert>
+			</Snackbar>
 		</Box>
 	);
 }

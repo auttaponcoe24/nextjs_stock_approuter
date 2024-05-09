@@ -37,7 +37,7 @@ export default function Register({}: Props) {
 	const [user, setUser] = useState<User>({ username: "", password: "" });
 	const router = useRouter();
 
-	const initialValue: User = { username: "", password: "" };
+	const initialValue: User = { username: "admin", password: "" };
 	const formValidateSchema = Yup.object().shape({
 		username: Yup.string().required("Username is required").trim(),
 		password: Yup.string().required("Password is required").trim(),
@@ -61,25 +61,30 @@ export default function Register({}: Props) {
 		resolver: yupResolver(formValidateSchema),
 	});
 
-	const handleOnSubmitForm = async (data: User) => {
+	const onSubmitForm = async (data: User) => {
 		console.log(data);
-		const res = await dispatch(signUp(data));
-		console.log("first", res);
-		if (res.payload.result === "ok") {
-			setNotiState((prev: any) => ({
-				...prev,
-				open: true,
-			}));
-			setTimeout(() => {
-				router.push("/stock");
-			}, 3000);
-		} else {
-			setNotiState((prev: any) => ({
-				...prev,
-				open: true,
-				severity: "error",
-			}));
+		const result = await dispatch(signUp(data));
+		if (signUp.fulfilled.match(result)) {
+			alert("Register successfully");
+		} else if (signUp.rejected.match(result)) {
+			alert("Register fail");
 		}
+
+		// if (res.payload.result === "ok") {
+		// 	setNotiState((prev: any) => ({
+		// 		...prev,
+		// 		open: true,
+		// 	}));
+		// 	setTimeout(() => {
+		// 		router.push("/stock");
+		// 	}, 3000);
+		// } else {
+		// 	setNotiState((prev: any) => ({
+		// 		...prev,
+		// 		open: true,
+		// 		severity: "error",
+		// 	}));
+		// }
 
 		// alert(JSON.stringify(data));
 		console.log(errors);
@@ -91,7 +96,7 @@ export default function Register({}: Props) {
 
 	const showForm = () => {
 		return (
-			<form onSubmit={handleSubmit(handleOnSubmitForm)}>
+			<form onSubmit={handleSubmit(onSubmitForm)}>
 				{/* Username */}
 				<Controller
 					control={control}
@@ -155,12 +160,17 @@ export default function Register({}: Props) {
 					)}
 				/>
 
+				{reducer.status === "failed" && (
+					<Alert severity="error">Register failed</Alert>
+				)}
+
 				<Button
 					className="mt-4"
 					type="submit"
 					fullWidth
 					variant="contained"
 					color="primary"
+					disabled={reducer.status === "fetching"}
 					// onClick={() => {}}
 				>
 					Create
