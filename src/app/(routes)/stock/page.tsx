@@ -1,10 +1,18 @@
+"use client";
 import { Box } from "@mui/material";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect } from "react";
+import StockComponent from "../../_components/Stock";
+import { useAppDispatch } from "@/src/store/store";
+import { useSelector } from "react-redux";
+import { getSession, userSelector } from "@/src/store/slices/userSlice";
 
 type Props = {};
 
 export default function Stock({}: Props) {
+	const dispatch = useAppDispatch();
+	const reducer = useSelector(userSelector);
+
 	return (
 		<Box sx={{ mt: 1 }}>
 			Stock
@@ -22,6 +30,7 @@ export default function Stock({}: Props) {
 				alt="logo"
 				style={{ objectFit: "contain" }}
 			/> */}
+			<StockComponent />
 		</Box>
 	);
 }

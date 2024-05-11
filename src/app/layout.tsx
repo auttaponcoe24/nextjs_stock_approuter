@@ -4,6 +4,7 @@ import "./globals.css";
 import AuthProvider from "./_components/common/AuthProvider";
 import ThemeRegistry from "./_components/ThemeRegistry/ThemeRegistry";
 import ReduxProvider from "./_components/common/ReduxProvider";
+import IntlProviders from "./_components/common/IntlProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,9 +22,11 @@ export default function RootLayout({
 		<html lang="en">
 			<body suppressHydrationWarning={true} className={inter.className}>
 				<ReduxProvider>
-					<AuthProvider>
-						<ThemeRegistry>{children}</ThemeRegistry>
-					</AuthProvider>
+					<IntlProviders>
+						<AuthProvider>
+							<ThemeRegistry>{children}</ThemeRegistry>
+						</AuthProvider>
+					</IntlProviders>
 				</ReduxProvider>
 			</body>
 		</html>

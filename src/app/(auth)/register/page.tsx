@@ -27,6 +27,7 @@ interface User {
 type Props = {};
 
 import Snackbar, { SnackbarOrigin } from "@mui/material/Snackbar";
+import { PayloadAction } from "@reduxjs/toolkit";
 
 interface State extends SnackbarOrigin {
 	open: boolean;
@@ -36,6 +37,10 @@ interface State extends SnackbarOrigin {
 export default function Register({}: Props) {
 	const [user, setUser] = useState<User>({ username: "", password: "" });
 	const router = useRouter();
+
+	// const reducer = useSelector((state: RootState) => state.userReducer);
+	const reducer = useSelector(userSelector);
+	const dispatch = useAppDispatch();
 
 	const initialValue: User = { username: "admin", password: "" };
 	const formValidateSchema = Yup.object().shape({
@@ -63,20 +68,32 @@ export default function Register({}: Props) {
 
 	const onSubmitForm = async (data: User) => {
 		console.log(data);
-		const result = await dispatch(signUp(data));
+		const result: PayloadAction<any> = await dispatch(signUp(data));
 		if (signUp.fulfilled.match(result)) {
-			alert("Register successfully");
+			// alert("Register successfully");
+			setNotiState((prev: any) => ({
+				...prev,
+				open: true,
+			}));
+			setTimeout(() => {
+				router.push("/login");
+			}, 3000);
 		} else if (signUp.rejected.match(result)) {
-			alert("Register fail");
+			// alert("Register fail");
+			setNotiState((prev: any) => ({
+				...prev,
+				open: true,
+				severity: "error",
+			}));
 		}
 
-		// if (res.payload.result === "ok") {
+		// if (result?.payload.resutl === "ok") {
 		// 	setNotiState((prev: any) => ({
 		// 		...prev,
 		// 		open: true,
 		// 	}));
 		// 	setTimeout(() => {
-		// 		router.push("/stock");
+		// 		router.push("/login");
 		// 	}, 3000);
 		// } else {
 		// 	setNotiState((prev: any) => ({
@@ -89,10 +106,6 @@ export default function Register({}: Props) {
 		// alert(JSON.stringify(data));
 		console.log(errors);
 	};
-
-	// const reducer = useSelector((state: RootState) => state.userReducer);
-	const reducer = useSelector(userSelector);
-	const dispatch = useAppDispatch();
 
 	const showForm = () => {
 		return (
@@ -170,7 +183,7 @@ export default function Register({}: Props) {
 					fullWidth
 					variant="contained"
 					color="primary"
-					disabled={reducer.status === "fetching"}
+					disabled={reducer?.status === "fetching"}
 					// onClick={() => {}}
 				>
 					Create

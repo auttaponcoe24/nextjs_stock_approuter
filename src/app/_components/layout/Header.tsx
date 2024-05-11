@@ -11,9 +11,9 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import { Badge, Menu, MenuItem } from "@mui/material";
-// import { useAppDispatch } from "@/src/store/store";
-// import { signOut } from "@/src/store/slices/userSlice";
 import { useRouter } from "next/navigation";
+import { useAppDispatch } from "@/src/store/store";
+import { signOut } from "@/src/store/slices/userSlice";
 
 const drawerWidth = 240;
 interface AppBarProps extends MuiAppBarProps {
@@ -42,12 +42,18 @@ type Props = { handleDrawerOpen: any; open: boolean };
 
 const Header = ({ handleDrawerOpen, open }: Props) => {
 	const [showProfileMenu, setShowProfileMenu] = React.useState(false);
-	// const dispatch = useAppDispatch();
+	const dispatch = useAppDispatch();
 
 	const handleClose = () => {
 		setShowProfileMenu(false);
 	};
 	const router = useRouter();
+
+	const handleSignOut = async () => {
+		const response = await dispatch(signOut());
+		// if (response.meta.requestStatus === "fulfilled")
+		if (signOut.fulfilled.match(response)) router.push("/login");
+	};
 
 	return (
 		<AppBar position="fixed" open={open}>
@@ -117,15 +123,7 @@ const Header = ({ handleDrawerOpen, open }: Props) => {
 						open={showProfileMenu}
 						onClose={handleClose}
 					>
-						<MenuItem
-							onClick={async () => {
-								// const response = await dispatch(signOut());
-								// if (response.meta.requestStatus === "fulfilled")
-								//   router.push("/login");
-							}}
-						>
-							Logout
-						</MenuItem>
+						<MenuItem onClick={handleSignOut}>Logout</MenuItem>
 						<MenuItem onClick={() => handleClose}>My account</MenuItem>
 					</Menu>
 				</Box>
