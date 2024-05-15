@@ -43,16 +43,19 @@ type Props = { handleDrawerOpen: any; open: boolean };
 const Header = ({ handleDrawerOpen, open }: Props) => {
 	const [showProfileMenu, setShowProfileMenu] = React.useState(false);
 	const dispatch = useAppDispatch();
+	const router = useRouter();
 
 	const handleClose = () => {
 		setShowProfileMenu(false);
 	};
-	const router = useRouter();
 
-	const handleSignOut = async () => {
+	const handleSignOut = async (): Promise<any> => {
 		const response = await dispatch(signOut());
-		// if (response.meta.requestStatus === "fulfilled")
-		if (signOut.fulfilled.match(response)) router.push("/login");
+		// console.log("response", response);
+
+		if (response?.meta?.requestStatus === "fulfilled") {
+			router.push("/");
+		}
 	};
 
 	return (

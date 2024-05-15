@@ -31,3 +31,13 @@ export const getSession = async (): Promise<GetSession> => {
 	});
 	return res.data;
 };
+
+export const getProducts = async (keyword?: string): Promise<any> => {
+	if (keyword) {
+		const res = await httpClient.get(`/stock/product/keyword/${keyword}`);
+		return res.data;
+	} else {
+		const res = await httpClient.get(`/stock/product`);
+		return res.data;
+	}
+};

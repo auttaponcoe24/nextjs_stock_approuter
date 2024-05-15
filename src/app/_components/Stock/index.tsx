@@ -19,7 +19,7 @@ export default function StockComponent({}: Props) {
 
 	const langTopic = ["th-TH", "en-US"];
 
-	console.log("path", path);
+	// console.log("path", path);
 	// const [open, setOpen] = useState(false);
 
 	// const onChangeLang = (lang: string) => {
@@ -31,7 +31,7 @@ export default function StockComponent({}: Props) {
 		setAnchorEl(event.currentTarget);
 	};
 	const handleClose = (data: any) => {
-		console.log("data", data);
+		// console.log("data", data);
 		setAnchorEl(null);
 		// router.push(router.asPath, { locale: data });
 	};

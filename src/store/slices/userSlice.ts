@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import * as serverService from "@/src/services/serverService";
 import httpClient from "@/src/utils/httpClient";
 import { AxiosRequestConfig } from "axios";
+import { UserData } from "@/src/models/user.model";
 
 interface UserState {
 	username: string;
@@ -13,7 +13,7 @@ interface UserState {
 	isAuthenticated: boolean;
 	isAuthenticating: boolean;
 	count: number;
-	// user?: UserData;
+	user?: UserData;
 }
 
 interface SignAcion {
@@ -146,9 +146,11 @@ const userSlice = createSlice({
 		// getSession
 		builder.addCase(getSession.fulfilled, (state, action) => {
 			state.isAuthenticating = false;
-			// if(action.payload && action.payload.user && action.payload.user.token){}
-			state.accessToken = action.payload.user.token;
-			state.isAuthenticated = true;
+			if (action.payload && action.payload.user && action.payload.user.token) {
+				state.accessToken = action.payload.user.token;
+				state.user = action.payload.user;
+				state.isAuthenticated = true;
+			}
 		});
 	},
 });

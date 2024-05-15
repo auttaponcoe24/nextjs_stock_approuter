@@ -8,6 +8,11 @@ const nextConfig = {
 				hostname: "ecklf.com",
 				pathname: "**",
 			},
+			{
+				protocol: "http",
+				hostname: "localhost",
+				pathname: "**",
+			},
 		],
 		minimumCacheTTL: 0,
 	},

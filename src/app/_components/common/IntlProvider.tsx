@@ -18,8 +18,8 @@ export default function IntlProviders({ children }: Props) {
 	const { locale = "th-TH" }: any = useRouter();
 	const router = useRouter();
 
-	console.log("locale", locale);
-	console.log("router", router);
+	// console.log("locale", locale);
+	// console.log("router", router);
 
 	return (
 		<IntlProvider locale={locale} messages={messages[locale]}>
