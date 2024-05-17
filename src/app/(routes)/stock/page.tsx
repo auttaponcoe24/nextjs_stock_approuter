@@ -1,7 +1,13 @@
 "use client";
 import * as React from "react";
 import Box from "@mui/material/Box";
-import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import {
+	DataGrid,
+	GridColDef,
+	GridRenderCellParams,
+	GridToolbarContainer,
+	GridToolbarFilterButton,
+} from "@mui/x-data-grid";
 import { useSelector } from "react-redux";
 import { getProducts, productSelector } from "@/src/store/slices/productSlice";
 import { useAppDispatch } from "@/src/store/store";
@@ -11,9 +17,17 @@ import dayjs from "dayjs";
 
 import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
-import { IconButton, Typography } from "@mui/material";
+import { Fab, IconButton, Link, Stack, Typography } from "@mui/material";
 import { NumericFormat } from "react-number-format";
-import { Delete, Edit } from "@mui/icons-material";
+import {
+	Add,
+	AddShoppingCart,
+	AssignmentReturn,
+	Delete,
+	Edit,
+	NewReleases,
+	Star,
+} from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 
 export default function stock() {
@@ -120,7 +134,7 @@ export default function stock() {
 				console.log("row", row);
 
 				return (
-					<div>
+					<Stack direction={"row"}>
 						<IconButton
 							aria-label="edit"
 							size="large"
@@ -131,11 +145,34 @@ export default function stock() {
 						<IconButton aria-label="delete" size="large" onClick={() => {}}>
 							<Delete fontSize="inherit" />
 						</IconButton>
-					</div>
+					</Stack>
 				);
 			},
 		},
 	];
+
+	const CustomToolbar: React.FunctionComponent<{
+		setFilterButtonEl: React.Dispatch<
+			React.SetStateAction<HTMLButtonElement | null>
+		>;
+	}> = ({ setFilterButtonEl }) => (
+		<GridToolbarContainer>
+			<GridToolbarFilterButton ref={setFilterButtonEl} />
+			<Link href="/stock/add">
+				<Fab
+					color="primary"
+					aria-label="add"
+					sx={{
+						position: "absolute",
+						top: 10,
+						right: 10,
+					}}
+				>
+					<Add />
+				</Fab>
+			</Link>
+		</GridToolbarContainer>
+	);
 
 	return (
 		<Box sx={{ height: 400, width: "100%" }}>
@@ -150,8 +187,9 @@ export default function stock() {
 					},
 				}}
 				pageSizeOptions={[10]}
-				checkboxSelection
-				disableRowSelectionOnClick
+				slots={{
+					toolbar: CustomToolbar,
+				}}
 			/>
 		</Box>
 	);
