@@ -30,7 +30,7 @@ import {
 } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 
-export default function stock() {
+export default function Stock() {
 	const reducer = useSelector(productSelector);
 	const dispatch = useAppDispatch();
 	const router = useRouter();
