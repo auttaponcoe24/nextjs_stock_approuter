@@ -41,3 +41,7 @@ export const getProducts = async (keyword?: string): Promise<any> => {
 		return res.data;
 	}
 };
+
+export const addProducts = async (data: FormData): Promise<void> => {
+	await httpClient.post(`/stock/product`, data);
+};

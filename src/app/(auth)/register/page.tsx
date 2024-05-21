@@ -67,7 +67,7 @@ export default function Register({}: Props) {
 	});
 
 	const onSubmitForm = async (data: User) => {
-		console.log(data);
+		// console.log(data);
 		const result: PayloadAction<any> = await dispatch(signUp(data));
 		if (signUp.fulfilled.match(result)) {
 			// alert("Register successfully");
@@ -104,7 +104,7 @@ export default function Register({}: Props) {
 		// }
 
 		// alert(JSON.stringify(data));
-		console.log(errors);
+		// console.log(errors);
 	};
 
 	const showForm = () => {

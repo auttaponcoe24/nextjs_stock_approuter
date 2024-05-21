@@ -131,7 +131,7 @@ export default function stock() {
 			headerName: "ACTION",
 			align: "center",
 			renderCell: ({ row }) => {
-				console.log("row", row);
+				// console.log("row", row);
 
 				return (
 					<Stack direction={"row"}>
@@ -151,11 +151,7 @@ export default function stock() {
 		},
 	];
 
-	const CustomToolbar: React.FunctionComponent<{
-		setFilterButtonEl: React.Dispatch<
-			React.SetStateAction<HTMLButtonElement | null>
-		>;
-	}> = ({ setFilterButtonEl }) => (
+	const CustomToolbar = ({ setFilterButtonEl }: any) => (
 		<GridToolbarContainer>
 			<GridToolbarFilterButton ref={setFilterButtonEl} />
 			<Link href="/stock/add">
