@@ -42,6 +42,10 @@ export const getProducts = async (keyword?: string): Promise<any> => {
 	}
 };
 
+export const addProducts = async (data: FormData): Promise<void> => {
+	await httpClient.post(`/stock/product`, data);
+};
+
 export const doGetStockById = async (id: string) => {
 	const res = await httpClient.get(`/stock/product/${id}`);
 

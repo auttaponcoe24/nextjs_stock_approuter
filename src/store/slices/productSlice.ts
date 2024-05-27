@@ -5,9 +5,11 @@ import { RootState } from "../store";
 
 interface ProductState {
 	products: ProductData[];
+	loading: boolean;
 }
 const initialState: ProductState = {
 	products: [],
+	loading: false,
 };
 
 export const getProducts = createAsyncThunk(
@@ -23,6 +25,21 @@ export const getProducts = createAsyncThunk(
 	}
 );
 
+export const addProduct = createAsyncThunk(
+	"prodcut/addProduct",
+	async (values: ProductData) => {
+		let data = new FormData();
+		data.append("name", values.name);
+		data.append("price", String(values.price));
+		data.append("stock", String(values.stock));
+		if (values.file) {
+			data.append("image", values.file);
+		}
+		const res = await serverService.addProducts(data);
+		return res;
+	}
+);
+
 const productSlice = createSlice({
 	name: "product",
 	initialState,
@@ -30,6 +47,14 @@ const productSlice = createSlice({
 	extraReducers: (builder) => {
 		builder.addCase(getProducts.fulfilled, (state, action) => {
 			state.products = action.payload;
+		});
+
+		// addProduct
+		builder.addCase(addProduct.pending, (state, action) => {
+			state.loading = true;
+		});
+		builder.addCase(addProduct.fulfilled, (state, action) => {
+			state.loading = false;
 		});
 	},
 });
