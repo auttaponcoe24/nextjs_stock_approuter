@@ -40,6 +40,15 @@ export const addProduct = createAsyncThunk(
 	}
 );
 
+export const getStockById = createAsyncThunk(
+	"product/getProductById",
+	async (id: string) => {
+		const res = await serverService.doGetStockById(id);
+
+		return res;
+	}
+);
+
 const productSlice = createSlice({
 	name: "product",
 	initialState,
