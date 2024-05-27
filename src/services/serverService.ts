@@ -41,3 +41,9 @@ export const getProducts = async (keyword?: string): Promise<any> => {
 		return res.data;
 	}
 };
+
+export const doGetStockById = async (id: string) => {
+	const res = await httpClient.get(`/stock/product/${id}`);
+
+	return res.data;
+};
