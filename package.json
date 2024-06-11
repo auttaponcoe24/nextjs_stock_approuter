@@ -27,6 +27,7 @@
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18",
     "react-hook-form": "^7.51.4",
+    "react-hot-toast": "^2.4.1",
     "react-iframe": "^1.8.5",
     "react-intl": "^6.6.6",
     "react-medium-image-zoom": "^5.2.0",
