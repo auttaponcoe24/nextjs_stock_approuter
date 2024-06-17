@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "target": "es5",
     "lib": [
       "dom",
       "dom.iterable",
@@ -21,12 +22,11 @@
         "name": "next"
       }
     ],
-    // "baseUrl": "src",
     "paths": {
       "@/*": [
         "./*"
       ],
-      "@/component/*": [
+      "@/components/*": [
         "./src/app/_components/*"
       ],
       "@/store/*": [
@@ -34,9 +34,6 @@
       ],
       "@/utils/*": [
         "./src/utils/*"
-      ],
-      "@/lang/*": [
-        "./src/lang/*"
       ]
     }
   },

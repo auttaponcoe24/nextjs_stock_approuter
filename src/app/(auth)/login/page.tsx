@@ -6,6 +6,7 @@ import {
 	Button,
 	Card,
 	CardContent,
+	CardMedia,
 	InputAdornment,
 	Snackbar,
 	TextField,
@@ -160,6 +161,11 @@ export default function Login({}: Props) {
 	return (
 		<Box className="flex justify-center items-center">
 			<Card className="max-w-[345px] mt-10" elevation={3}>
+				<CardMedia
+					sx={{ height: 200 }}
+					image="/static/img/next_login.jpg"
+					title="Contemlative Reptile"
+				/>
 				<CardContent>
 					<Typography gutterBottom variant="h5" component="h2">
 						Login ({reducer.count})

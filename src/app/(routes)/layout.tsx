@@ -26,6 +26,7 @@ export default function RoutesLayout({ children }: Props) {
 				<Sidebar open={open} handleDrawerClose={handleDrawerClose} />
 				<Box component="main" sx={{ flexGrow: 1, p: 3 }}>
 					<DrawerHeader />
+					{/* <React.Suspense fallback={<Loading />}>{children}</React.Suspense> */}
 					{children}
 				</Box>
 			</Box>

@@ -9,7 +9,11 @@ import {
 	GridToolbarFilterButton,
 } from "@mui/x-data-grid";
 import { useSelector } from "react-redux";
-import { getProducts, productSelector } from "@/src/store/slices/productSlice";
+import {
+	deleteProduct,
+	getProducts,
+	productSelector,
+} from "@/src/store/slices/productSlice";
 import { useAppDispatch } from "@/src/store/store";
 import Image from "next/image";
 import { productImageURL } from "@/src/utils/commonUtil";
@@ -169,6 +173,7 @@ export default function Stock() {
 							size="large"
 							onClick={() => {
 								setOpenDialog(true);
+								setSelectedProduct(row);
 							}}
 						>
 							<Delete fontSize="inherit" />
@@ -198,13 +203,23 @@ export default function Stock() {
 		</GridToolbarContainer>
 	);
 
-	const handleDeleteConfirm = () => {};
+	const handleDeleteConfirm = async () => {
+		if (selectedProduct) {
+			const result = await dispatch(deleteProduct(String(selectedProduct.id)));
+			if (result.meta.requestStatus == "fulfilled") {
+				dispatch(getProducts());
+				setOpenDialog(false);
+			} else {
+				alert("Failed to delete");
+			}
+		}
+	};
 
 	// Dialog or Modal
 	const showDialog = () => {
-		// if (selectedProduct === null) {
-		// 	return;
-		// }
+		if (selectedProduct === null) {
+			return;
+		}
 		return (
 			<Dialog
 				open={openDialog}
@@ -217,11 +232,11 @@ export default function Stock() {
 						width={100}
 						height={100}
 						alt="product image"
-						// src={productImageURL(selectedProduct.image)}
+						src={productImageURL(selectedProduct.image)}
 						style={{ width: 100, borderRadius: "5%", objectFit: "cover" }}
 					/>
 					<br />
-					{/* Confirm to delete the product? : {selectedProduct.name} */}
+					Confirm to delete the product? : {selectedProduct.name}
 				</DialogTitle>
 				<DialogContent>
 					<DialogContentText id="alert-dialog-slide-description">

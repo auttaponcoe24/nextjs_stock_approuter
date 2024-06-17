@@ -1,11 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+	output: "standalone",
 	images: {
 		dangerouslyAllowSVG: true,
+		// domains: ["codemobiles.com", "pospos.co", "localhost"],
 		remotePatterns: [
 			{
 				protocol: "https",
-				hostname: "ecklf.com",
+				hostname: "codemobiles.com",
+				pathname: "**",
+			},
+			{
+				protocol: "https",
+				hostname: "pospos.co",
 				pathname: "**",
 			},
 			{
@@ -13,9 +20,14 @@ const nextConfig = {
 				hostname: "localhost",
 				pathname: "**",
 			},
+			{
+				protocol: "https",
+				hostname: "ecklf.com",
+				pathname: "**",
+			},
 		],
 		minimumCacheTTL: 0,
 	},
 };
 
-export default nextConfig;
+module.exports = nextConfig;

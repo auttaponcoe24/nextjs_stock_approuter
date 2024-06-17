@@ -50,3 +50,7 @@ export const doGetStockById = async (id: string) => {
 	const res = await httpClient.get(`/stock/product/${id}`);
 	return res.data;
 };
+
+export const deleteProduct = async (id?: string): Promise<void> => {
+	await httpClient.delete(`/stock/product/${id}`);
+};
