@@ -11,7 +11,7 @@
 "start": "next start -p $PORT",
 
 
-#3. Change add this to the script
+#3. Add this to the script
 -----------------------------------
 "heroku-postbuild": "npm run build"
 
