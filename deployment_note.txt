@@ -1,0 +1,25 @@
+#1. Set engines
+-----------------------------------
+ "engines": {
+    "node": "12.16.3",
+    "npm": "6.14.4"
+  }
+
+
+#2. Change start script
+-----------------------------------
+"start": "next start -p $PORT",
+
+
+#3. Change add this to the script
+-----------------------------------
+"heroku-postbuild": "npm run build"
+
+
+#4. Heroku cli
+-----------------------------------
+sudo yarn global add heroku
+
+#5. Check log
+-----------------------------------
+heroku logs --tail --app heroku-cm-demo
